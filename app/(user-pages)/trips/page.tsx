@@ -1,5 +1,5 @@
 import { Trip } from "@/_types/Trips"
-import TripCard from "../_components/TripCard"
+import TripCard from "@/app/_components/TripCard"
 import {createClient} from 'pexels'; 
 
 const tripsArr: Trip[] = [

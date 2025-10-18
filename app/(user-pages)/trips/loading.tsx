@@ -1,4 +1,4 @@
-import SkeletonCard from "../_components/SkeletonCard";
+import SkeletonCard from "@/app/_components/SkeletonCard";
 
  
  
