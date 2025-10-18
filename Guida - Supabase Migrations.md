@@ -108,7 +108,7 @@ npm exec supabase db push -- --dry-run
 npm exec supabase db push
 ```
 
-`db push` applicherà solo le migrazioni che **non sono ancora nella tabella `schema_migrations`**.[^8][^1][^2]
+`db push` applicherà solo le migrazioni che **non sono ancora nella tabella `schema_migrations`**.
 
 **4. Verifica:**
 
@@ -116,11 +116,11 @@ npm exec supabase db push
 npm exec supabase migration list
 ```
 
-Dovresti vedere la nuova migrazione in entrambe le colonne.[^6][^2]
+Dovresti vedere la nuova migrazione in entrambe le colonne.
 
 #### Metodo B: Modifiche tramite Dashboard + Diff
 
-Se preferisci usare l'interfaccia grafica:[^9][^10][^8]
+Se preferisci usare l'interfaccia grafica:
 
 **1. Fai le modifiche nel Dashboard di Supabase** (crea tabelle, colonne, ecc.)
 
@@ -158,9 +158,9 @@ npm exec supabase migration repair <timestamp> --status applied
 
 #### Errore: "Migration history does not match"
 
-Questo succede quando locale e remoto non sono sincronizzati:[^7][^11][^3]
+Questo succede quando locale e remoto non sono sincronizzati:
 
-**Soluzione 1 - Reset Completo (se non hai migrazioni importanti)**:[^4][^3]
+**Soluzione 1 - Reset Completo (se non hai migrazioni importanti)**:
 
 ```bash
 # 1. Pulisci la tabella delle migrazioni nel database remoto
@@ -175,7 +175,7 @@ npm exec supabase db pull
 # Rispondi Y quando chiede di aggiornare la history table
 ```
 
-**Soluzione 2 - Repair Manuale (se hai migrazioni da preservare)**:[^5][^2]
+**Soluzione 2 - Repair Manuale (se hai migrazioni da preservare)**:
 
 ```bash
 # Vedi quali migrazioni sono problematiche
@@ -191,7 +191,7 @@ npm exec supabase migration repair <timestamp> --status reverted
 
 #### Errore: "db push tries to re-apply existing migrations"
 
-Questo è esattamente il tuo problema. Succede perché le migrazioni non sono registrate nella tabella `schema_migrations`.[^7][^1][^6]
+Questo è esattamente il tuo problema. Succede perché le migrazioni non sono registrate nella tabella `schema_migrations`.
 
 **Soluzione:**
 
@@ -250,26 +250,26 @@ npm run db:diff my_changes
 
 ### Best Practices
 
-**1. Un'unica fonte di verità**[^12][^4][^7]
+**1. Un'unica fonte di verità**
 
 Non mescolare modifiche fatte da Dashboard e modifiche fatte da migrazioni locali. Scegli uno dei due metodi:
 
 - **Opzione A**: Modifiche solo tramite file SQL locali → `db push`
 - **Opzione B**: Modifiche solo tramite Dashboard → `db diff` per generare migrazione
 
-**2. Versiona sempre le migrazioni**[^13][^12]
+**2. Versiona sempre le migrazioni**
 
-I file in `supabase/migrations/` **devono essere committati in Git**. Non metterli mai in `.gitignore`. Questo permette a tutto il team di avere lo stesso schema.[^12]
+I file in `supabase/migrations/` **devono essere committati in Git**. Non metterli mai in `.gitignore`. Questo permette a tutto il team di avere lo stesso schema.
 
-**3. Usa `--dry-run` prima di pushare**[^1]
+**3. Usa `--dry-run` prima di pushare**
 
 ```bash
 npm exec supabase db push -- --dry-run
 ```
 
-Ti mostra cosa verrà eseguito senza applicare effettivamente le modifiche.[^1]
+Ti mostra cosa verrà eseguito senza applicare effettivamente le modifiche.
 
-**4. Mantieni le migrazioni piccole e atomiche**[^14][^8]
+**4. Mantieni le migrazioni piccole e atomiche**
 
 Ogni migrazione dovrebbe fare una cosa specifica:
 
@@ -277,7 +277,7 @@ Ogni migrazione dovrebbe fare una cosa specifica:
 - ✅ `add_email_index_to_users.sql`
 - ❌ `big_refactor_everything.sql`
 
-**5. Non modificare mai migrazioni già applicate**[^14][^8]
+**5. Non modificare mai migrazioni già applicate**
 
 Se una migrazione è già stata applicata (visibile in `migration list`), non modificarla. Crea una nuova migrazione per le correzioni.
 
@@ -312,134 +312,4 @@ npm run db:pull  # Crea nuova baseline pulita
 # Rispondi Y quando chiesto
 ```
 
-Questo ti rimette in uno stato pulito da cui partire.[^3][^4]
-<span style="display:none">[^15][^16][^17][^18][^19][^20][^21][^22][^23][^24][^25][^26][^27][^28][^29][^30][^31][^32][^33][^34][^35][^36][^37][^38][^39][^40][^41][^42][^43][^44][^45][^46][^47][^48][^49][^50][^51][^52][^53][^54][^55][^56][^57][^58][^59][^60][^61][^62][^63]</span>
-
-<div align="center">⁂</div>
-
-[^1]: https://supabase.com/docs/reference/cli/introduction
-
-[^2]: https://supabase.com/llms/cli.txt
-
-[^3]: https://github.com/supabase/supabase/issues/15695
-
-[^4]: https://www.reddit.com/r/Supabase/comments/1nvt0ne/resetting_database_migrations/
-
-[^5]: https://github.com/orgs/supabase/discussions/11263
-
-[^6]: https://www.reddit.com/r/Supabase/comments/1ipepbp/how_are_you_guys_handling_migrations_between/
-
-[^7]: https://www.answeroverflow.com/m/1335969565787689070
-
-[^8]: https://supabase.com/docs/guides/deployment/database-migrations
-
-[^9]: https://supabase.com/docs/guides/local-development/declarative-database-schemas
-
-[^10]: https://supabase.com/docs/guides/deployment/managing-environments
-
-[^11]: https://github.com/supabase/cli/issues/4009
-
-[^12]: https://www.reddit.com/r/Supabase/comments/1ap9y16/does_supabase_db_pull_actually_pull_the/
-
-[^13]: https://github.com/orgs/supabase/discussions/37503
-
-[^14]: https://chat2db.ai/resources/blog/how-to-manage-supabase-migrations
-
-[^15]: https://arxiv.org/pdf/2309.04197.pdf
-
-[^16]: http://arxiv.org/pdf/2407.02644.pdf
-
-[^17]: http://arxiv.org/pdf/2308.14687.pdf
-
-[^18]: http://arxiv.org/pdf/1608.05564.pdf
-
-[^19]: https://arxiv.org/pdf/2309.11406.pdf
-
-[^20]: https://arxiv.org/pdf/2105.02389.pdf
-
-[^21]: https://www.mdpi.com/2504-2289/5/2/24/pdf?version=1621327330
-
-[^22]: https://arxiv.org/pdf/2207.01124.pdf
-
-[^23]: https://downloads.hindawi.com/journals/mpe/2020/7848232.pdf
-
-[^24]: https://arxiv.org/pdf/2404.08525.pdf
-
-[^25]: http://www.hrpub.org/download/20160130/WJCAT1-13704716.pdf
-
-[^26]: https://arxiv.org/pdf/2202.09365.pdf
-
-[^27]: https://arxiv.org/html/2503.17685v1
-
-[^28]: https://arxiv.org/pdf/2412.12636.pdf
-
-[^29]: https://www.maxwellsci.com/announce/RJASET/7-2421-2426.pdf
-
-[^30]: https://ir.cwi.nl/pub/31600/31600.pdf
-
-[^31]: https://www.youtube.com/watch?v=EALkUlOKvAs\&vl=it
-
-[^32]: https://supabase.com/docs/guides/deployment/branching/working-with-branches
-
-[^33]: https://www.reddit.com/r/Supabase/comments/1emw0dn/how_to_use_migrations/
-
-[^34]: https://github.com/orgs/supabase/discussions/29545
-
-[^35]: https://github.com/supabase/cli/issues/2881
-
-[^36]: https://supabase.com/blog/supabase-local-dev
-
-[^37]: https://github.com/supabase/supabase/issues/32531
-
-[^38]: https://dev.to/tomokat/setting-up-local-supabase-when-migration-scripts-error-out-4k60
-
-[^39]: https://supabase.com/docs/guides/local-development/overview
-
-[^40]: http://link.springer.com/10.1007/s00330-019-06282-w
-
-[^41]: https://academic.oup.com/jimmunol/article/210/Supplement_1/63.01/7947720
-
-[^42]: https://journals.sagepub.com/doi/10.1177/1526602821995831
-
-[^43]: http://biorxiv.org/lookup/doi/10.1101/2024.01.13.575526
-
-[^44]: https://journals.sagepub.com/doi/10.1177/15266028241232915
-
-[^45]: https://ieeexplore.ieee.org/document/9873909/
-
-[^46]: https://journals.sagepub.com/doi/10.1177/23259671251338802
-
-[^47]: https://link.springer.com/10.1007/s00270-025-03996-x
-
-[^48]: https://www.science.org/doi/10.1126/sciadv.adq2519
-
-[^49]: https://www.mp.pl/videosurgery/issue/article/17958/
-
-[^50]: http://arxiv.org/pdf/2306.15516.pdf
-
-[^51]: http://arxiv.org/pdf/2410.16501.pdf
-
-[^52]: https://arxiv.org/pdf/2407.03880.pdf
-
-[^53]: http://arxiv.org/pdf/2309.02804.pdf
-
-[^54]: https://arxiv.org/pdf/1812.04894.pdf
-
-[^55]: https://arxiv.org/pdf/2410.15894.pdf
-
-[^56]: https://zenodo.org/records/7919771/files/Migration_Paper.pdf
-
-[^57]: http://eudl.eu/doi/10.4108/eai.11-4-2018.154463
-
-[^58]: https://github.com/supabase/cli/issues/1721
-
-[^59]: https://supabase.com/docs/guides/platform/migrating-within-supabase/backup-restore
-
-[^60]: https://github.com/supabase/cli/issues/2534
-
-[^61]: https://www.answeroverflow.com/m/1421843060102271008
-
-[^62]: https://supabase.com/docs/guides/platform/migrating-within-supabase
-
-[^63]: https://blog.stackademic.com/how-to-fix-supabase-migration-history-mismatch-a-quick-solution-6e61cda9ee53
-
+Questo ti rimette in uno stato pulito da cui partire.
