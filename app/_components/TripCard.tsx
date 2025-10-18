@@ -1,0 +1,70 @@
+import Image from 'next/image';
+import { Trip } from "@/_types/Trips"
+import Link from "next/link";
+
+const PinIcon = () => {
+    return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-3">
+        <path fillRule="evenodd"
+              d="m7.539 14.841.003.003.002.002a.755.755 0 0 0 .912 0l.002-.002.003-.003.012-.009a5.57 5.57 0 0 0 .19-.153 15.588 15.588 0 0 0 2.046-2.082c1.101-1.362 2.291-3.342 2.291-5.597A5 5 0 0 0 3 7c0 2.255 1.19 4.235 2.292 5.597a15.591 15.591 0 0 0 2.046 2.082 8.916 8.916 0 0 0 .189.153l.012.01ZM8 8.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"
+              clipRule="evenodd"/>
+    </svg>
+}
+
+const DepartureIcon = () => {
+    return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -64 640 640" fill="currentColor" className="size-3">
+        <path
+            d="M624 448H16c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h608c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16M80.55 341.27c6.28 6.84 15.1 10.72 24.33 10.71l130.54-.18a65.6 65.6 0 0 0 29.64-7.12l290.96-147.65c26.74-13.57 50.71-32.94 67.02-58.31 18.31-28.48 20.3-49.09 13.07-63.65-7.21-14.57-24.74-25.27-58.25-27.45-29.85-1.94-59.54 5.92-86.28 19.48l-98.51 49.99-218.7-82.06a17.8 17.8 0 0 0-18-1.11L90.62 67.29c-10.67 5.41-13.25 19.65-5.17 28.53l156.22 98.1-103.21 52.38-72.35-36.47a17.8 17.8 0 0 0-16.07.02L9.91 230.22c-10.44 5.3-13.19 19.12-5.57 28.08z"
+        ></path>
+    </svg>
+}
+
+const ArrivalIcon = () => {
+    return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -64 640 640" fill="currentColor" className="size-3">
+        <path
+            d="M624 448H16c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h608c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16M44.81 205.66l88.74 80a62.6 62.6 0 0 0 25.47 13.93l287.6 78.35c26.48 7.21 54.56 8.72 81 1.36 29.67-8.27 43.44-21.21 47.25-35.71 3.83-14.5-1.73-32.71-23.37-54.96-19.28-19.82-44.35-32.79-70.83-40l-97.51-26.56L282.8 30.22c-1.51-5.81-5.95-10.35-11.66-11.91L206.05.58c-10.56-2.88-20.9 5.32-20.71 16.44l47.92 164.21-102.2-27.84-27.59-67.88c-1.93-4.89-6.01-8.57-11.02-9.93L52.72 64.75c-10.34-2.82-20.53 5-20.72 15.88l.23 101.78c.19 8.91 6.03 17.34 12.58 23.25"
+        ></path>
+    </svg>
+}
+
+ interface PhotoTrip extends Trip {
+    color?: string,
+    src?: string
+}
+
+type TripCardProps = {
+    trip: PhotoTrip,  
+}
+
+export default function TripCard({ trip }: TripCardProps) {
+ 
+  
+    // allow CSS custom properties in style by widening the type
+    const cssVars: React.CSSProperties & Record<string, string | undefined> = {
+        '--color-primary': trip.color ?? undefined,
+        '--color-primary-content': 'white'
+    };
+
+    return (
+        <Link href={`/trips/${trip.name.toLowerCase().replaceAll(' ','-')}`}  className={`card w-full shadow-lg rounded-md`} style={cssVars}>
+                    <Image
+                    className="h-full object-cover rounded-lg"
+                    src={trip.src || '/placeholder.jpg'}
+                    alt={trip.name}
+                    width={500}
+                    height={300}
+                    style={{ borderRadius: '0.5rem 0.5rem 0 0', objectFit: 'cover', height: '100%' }}
+                />
+
+                <div className="flex flex-col justify-between gap-3 p-3">
+                    <span className="badge badge-sm  badge-primary "><PinIcon/> {trip.country}</span>
+                    <h2 className="font-bold text-lg leading-none">{trip.name}</h2>
+                    <div className="flex flex-wrap items-center  gap-2 ">
+                        <div className="badge badge-outline  badge-sm"><DepartureIcon/> {trip.date_start}</div>
+                        <div className="badge badge-outline   badge-sm"><ArrivalIcon/> {trip.date_end}</div>
+                    </div>
+                    <p>{trip.expect}</p>
+                    <button className="btn btn-primary rounded-md">Vai al viaggio</button>
+                </div>
+            </Link> 
+    )
+}
